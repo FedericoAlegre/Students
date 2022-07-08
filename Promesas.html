@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+    <title>Promesas</title>
+    <script>
+        function test() {
+            console.log("start message!!")
+            var myFirstPromise = new Promise((resolve, reject) => {
+                setTimeout(function () {
+                    resolve("this was succesful!");
+                    reject("rejected!!");
+                });
+            });
+
+            myFirstPromise.then((successMessage) => {
+                console.log("sweet" + successMessage);
+                let tbody = document.getElementsByTagName("tbody")[0];
+                let row = tbody.insertRow();
+                let cell = row.insertCell();
+                cell.innerHTML = "fede";
+                let cell2 = row.insertCell();
+                cell2.innerHTML = "alegre";
+
+            }).catch((reason) => {
+                console.log("opps!" + reason);
+            });
+            console.log("End message!");
+
+
+        }
+
+        function loadImage(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+                request.open('GET', url);
+                request.responseType = 'json';
+                request.onload = function () {
+                    if (request.status == 200) {
+                        resolve(request.response);
+                    }
+                    else {
+                        reject(Error('Image couldnt be loaded. Errpr: ' + request.statusText));
+                    }
+                }
+                request.onerror = function () {
+                    reject(Error('Oops!'));
+                }
+
+                request.send();
+            });
+        }
+        window.onload = function () {
+
+            loadImage('http://aabb-181-230-219-190.ngrok.io/student/getAll').then(response => {
+                response.forEach(element => {
+                    var tbody = document.querySelector('tbody');
+                    let row = tbody.insertRow();
+                    let id = row.insertCell();
+                    id.innerHTML = element.id;
+                    let dni = row.insertCell();
+                    dni.innerHTML = element.dni;
+                    let lastName = row.insertCell();
+                    lastName.innerHTML = element.lastName;
+                    let firstName = row.insertCell();
+                    firstName.innerHTML = element.firstName;
+                    let email = row.insertCell();
+                    email.innerHTML = element.email;
+                })
+            })
+                .catch((reason) => {
+                    console.log(Error(reason));
+                })
+        }
+
+
+    </script>
+    <style>
+        table {
+            background-color: black;
+            color: white;
+            width: 600px;
+            border: 2px;
+            border-color: aliceblue;
+
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="test()">+
+    </button>
+    <table>
+        <thead>
+            <tr>
+                <td><b>ID</b></td>
+                <td><b>DNI</b></td>
+                <td><b>Apellido</b></td>
+                <td><b>Nombre</b></td>
+                <td><b>Email</b></td>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+
+</html>
